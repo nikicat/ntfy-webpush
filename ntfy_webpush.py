@@ -6,6 +6,8 @@ import platform
 from ntfy.data import ntfy_data_dir
 from pywebpush import webpush
 from py_vapid import Vapid01, b64urlencode
+from cryptography.hazmat.primitives.serialization import Encoding
+from cryptography.hazmat.primitives.serialization import PublicFormat
 
 
 def notify(title, message, private_key, subscription_info, **kwargs):
@@ -32,7 +34,7 @@ def setup():
         print ('Generating ' + public_key_path)
         vapid.save_public_key(public_key_path)
 
-    raw_pub = vapid.public_key.public_numbers().encode_point()
+    raw_pub = vapid.public_key.public_bytes(Encoding.X962, PublicFormat.UncompressedPoint)
     print ('')
     print ('Open the following url in your browser to continue configuring ntfy-webpush')
     print ('https://dschep.github.io/ntfy-webpush/#publicKey={0}&privateKeyPath={1}'.format(
